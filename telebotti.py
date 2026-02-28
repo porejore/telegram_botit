@@ -32,7 +32,7 @@ def send_welcome(message):
         message,
         "apu botti\n"
         "nyt tä\n"
-        "/roll 50\n"
+        "/roll 0-100\n"
         "/kuva prompt\n"
         "/reset\n"
         f"tägää {BOT_USERNAME} jos ryhmä"
