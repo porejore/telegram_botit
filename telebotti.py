@@ -5,6 +5,7 @@ import io
 import base64
 import time
 import threading
+import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from collections import defaultdict
 from dotenv import load_dotenv
@@ -193,4 +194,12 @@ def start_health_server():
 
 threading.Thread(target=start_health_server, daemon=True).start()
 
+
+LOCKFILE = "/tmp/bot.lock"
+if os.path.exists(LOCKFILE):
+    print("apu: lock löytyy, toinen instanssi jo pyörii")
+    sys.exit(0)
+
+with open(LOCKFILE, "w") as f:
+    f.write(str(os.getpid()))
 bot.infinity_polling()
