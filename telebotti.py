@@ -4,6 +4,8 @@ import random
 import io
 import base64
 import time
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from collections import defaultdict
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -174,4 +176,21 @@ def handle_message(message):
 
 
 print(f"🐸 APU ABYSS MODE ({BOT_USERNAME}) käynnis nyt tä")
+
+def start_health_server():
+    port = int(os.getenv("PORT", "10000"))
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"ok")
+        def log_message(self, format, *args):
+            return  # ei spämmi logeja
+
+    server = HTTPServer(("0.0.0.0", port), Handler)
+    server.serve_forever()
+
+threading.Thread(target=start_health_server, daemon=True).start()
+
 bot.infinity_polling()
